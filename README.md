@@ -5,7 +5,7 @@ Exemple d'utilisation d'ApexChart sur Blazor WebAssembly avec mise à jour en te
 SignalR est une bibliothèque gratuite et open-source pour ASP.NET Core qui permet au serveur d'envoyer des messages asynchrones en temps réel aux clients connectés. C'est une couche d'abstraction au-dessus de WebSockets, facilitant son utilisation et fournissant des alternatives à d'autres formes de communication lorsque cela est nécessaire (événements envoyés par le serveur et sondage long).
 
 Ce projet montre comment créer une application Blazor WebAssembly qui affiche des graphiques en temps réel à partir d'un serveur SignalR.
-
+#### todo: redis backplane with signalR
 
 ## Structure du projet
 
