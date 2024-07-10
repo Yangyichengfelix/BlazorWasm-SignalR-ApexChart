@@ -54,7 +54,7 @@ La méthode OnDisconnectedAsync est appelée lorsqu'un client se déconnecte, re
 ```csharp
 /*
 * BlazorWasmSignalR.SignalRServer.Hubs
-* RealTimeDataHub
+* RealTimeDataHub.cs
 */
 using BlazorWasmSignalR.SignalRServer.BackgroundServices;
 using BlazorWasmSignalR.Wasm.Shared;
@@ -103,6 +103,10 @@ public class RealTimeDataHub : Hub
 ### RealTimeDataStreamWriter implémentation 
 Ce service maintient une liste de clients abonnés pour recevoir les changements de prix et simule un changement de prix chaque seconde.
 ```csharp
+/*
+* BlazorWasmSignalR.SignalRServer.BackgroundServices
+* RealTimeDataStreamWriter.cs
+*/
 using BlazorWasmSignalR.Wasm.Shared;
 using System.Security.Cryptography;
 using System.Threading.Channels;
@@ -216,6 +220,8 @@ Sur la page principale, nous aurons deux graphiques :
 Pour afficher un graphique à l’aide d’ApexCharts pour Blazor, nous utilisons le composant ApexChart et un ApexPointSeries pour chaque série.
 
 ```razor
+@* BlazorWasmSignalR.Wasm.Client.Pages*@
+@* RealtimeCharts.razor *@
 <ApexChart TItem="DataItem"
            Title="Currency Exchange Rates in USD"
            Options="@_lineChartOptions"
@@ -247,6 +253,8 @@ La propriété Options reçoit un ApexChartOptions<DataItem> où nous pouvons pe
   - Fixe l'axe Y dans la plage de 0 à 5.
 
 ```csharp
+@* BlazorWasmSignalR.Wasm.Client.Pages*@
+@* RealtimeCharts.razor.cs *@
 private ApexChartOptions<DataItem> _lineChartOptions = new ApexChartOptions<DataItem>
 {
     Chart = new Chart
@@ -296,7 +304,8 @@ private ApexChartOptions<DataItem> _lineChartOptions = new ApexChartOptions<Data
 @page "/"
 @using BlazorWasmSignalR.Wasm.Shared
 @using System.Security.Cryptography;
-
+@* BlazorWasmSignalR.Wasm.Client.Pages*@
+@* RealtimeCharts.razor *@
 <PageTitle>Real-time charts in Blazor WebAssembly</PageTitle>
 
 <h1>Real-time charts in Blazor WebAssembly</h1>
@@ -348,6 +357,8 @@ Pour se connecter à un flux SignalR, nous créons une connexion au Hub en utili
 Ensuite, nous nous abonnons au flux en utilisant la méthode StreamAsChannelAsync, en passant le nom du flux.
 
 ```csharp
+@* BlazorWasmSignalR.Wasm.Client.Pages*@
+@* RealtimeCharts.razor.cs *@
 var connection = new HubConnectionBuilder()
     .WithUrl(_configuration["RealtimeDataUrl"]!) //https://localhost:7086/realtimedata
     .Build();
@@ -369,6 +380,8 @@ Pour lire les données du flux, on utilise la méthode WaitToReadAsync de la cla
 Ensuite, on ajoute les valeurs à la série et on appelle la méthode UpdateSeriesAsync du graphique pour forcer un nouveau rendu.
 
 ```csharp
+@* BlazorWasmSignalR.Wasm.Client.Pages*@
+@* RealtimeCharts.razor.cs *@
 private async Task ReadCurrencyStreamAsync(ChannelReader<CurrencyStreamItem> channelCurrencyStreamItem)
 {
     // Wait asynchronously for data to become available
