@@ -400,8 +400,79 @@ private async Task ReadCurrencyStreamAsync(ChannelReader<CurrencyStreamItem> cha
 
 ```
 
+⚠️ Parce que je veux que les mises à jour soient asynchrones, je n'attends pas les méthodes ReadCurrencyStreamAsync et ReadVariationStreamAsync.
 
-todo:
+Voici le code complet :
+
+```csharp
+@* BlazorWasmSignalR.Wasm.Client.Pages*@
+@* RealtimeCharts.razor.cs *@
+private readonly IList<DataItem> _yenSeries = new List<DataItem>();
+private readonly IList<DataItem> _euroSeries = new List<DataItem>();
+private ApexChart<DataItem> _lineChart = default!;
+private ApexChart<DataItem> _radialChart = default!;
+private ApexChart<DataItem> _lineChart = default!;
+
+protected override async Task OnInitializedAsync()
+{
+    _radialData = new DataItem[1] {
+        new(DateTime.Now.ToString("mm:ss"), 0)
+    }; //Initialize the data for the radial chart
+
+    var connection = new HubConnectionBuilder()
+        .WithUrl(_configuration["RealtimeDataUrl"]!)
+        .Build();
+
+    await connection.StartAsync();
+
+    var channelCurrencyStreamItem = await connection
+        .StreamAsChannelAsync<CurrencyStreamItem>("CurrencyValues");
+
+    var channelVariation = await connection
+        .StreamAsChannelAsync<DataItem>("Variation");
+
+    _ = ReadCurrencyStreamAsync(channelCurrencyStreamItem);
+    _ = ReadVariationStreamAsync(channelVariation);
+}
+
+private async Task ReadCurrencyStreamAsync(ChannelReader<CurrencyStreamItem> channelCurrencyStreamItem)
+{
+    // Wait asynchronously for data to become available
+    while (await channelCurrencyStreamItem.WaitToReadAsync())
+    {
+        // Read all currently available data synchronously, before waiting for more data
+        while (channelCurrencyStreamItem.TryRead(out var currencyStreamItem))
+        {
+            _yenSeries.Add(new(currencyStreamItem.Minute, currencyStreamItem.YenValue));
+            _euroSeries.Add(new(currencyStreamItem.Minute, currencyStreamItem.EuroValue));
+
+            await _lineChart.UpdateSeriesAsync();
+        }
+    }
+}
+
+private async Task ReadVariationStreamAsync(ChannelReader<DataItem> channelVariation)
+{
+    // Wait asynchronously for data to become available
+    while (await channelVariation.WaitToReadAsync())
+    {
+        // Read all currently available data synchronously, before waiting for more data
+        while (channelVariation.TryRead(out var variation))
+        {
+            _radialData[0] = variation;
+
+            await _radialChart.UpdateSeriesAsync();
+        }
+    }
+}
+
+```
+## Références et Liens
+- [Documentation ApexCharts pour Blazor : https://apexcharts.github.io/Blazor-ApexCharts/](https://apexcharts.github.io/Blazor-ApexCharts/)
+- [GitHub ApexCharts pour Blazor : https://github.com/apexcharts/Blazor-ApexCharts](https://github.com/apexcharts/Blazor-ApexCharts)
+- [Site officiel ApexCharts : https://apexcharts.com/](https://apexcharts.com/)
+- [Documentation Microsoft sur le streaming avec SignalR : https://learn.microsoft.com/en-us/aspnet/core/signalr/streaming](https://learn.microsoft.com/en-us/aspnet/core/signalr/streaming)
+- [Fonctionnalités client de SignalR : https://learn.microsoft.com/en-us/aspnet/core/signalr/client-features](https://learn.microsoft.com/en-us/aspnet/core/signalr/client-features)
 
 
 ### Auteur d'origine
