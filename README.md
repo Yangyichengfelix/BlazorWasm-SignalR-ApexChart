@@ -49,7 +49,8 @@ La méthode OnDisconnectedAsync est appelée lorsqu'un client se déconnecte, re
 ⚠️ Il s'agit d'une implémentation basique qui n'est pas évolutive horizontalement. Elle est uniquement à des fins de démonstration. Pour une mise à l'échelle horizontale de SignalR, un [dataplane Redis](https://learn.microsoft.com/en-us/aspnet/core/signalr/redis-backplane?view=aspnetcore-8.0) doit être configuré.
 
 [Documentation Redis Backplane SignalR](https://github.com/dotnet/AspNetCore.Docs/blob/main/aspnetcore/signalr/redis-backplane.md)
-
+[Scaling SignalR Core Web Applications With Kubernetes](https://medium.com/swlh/scaling-signalr-core-web-applications-with-kubernetes-fca32d787c7d)
+[How can I implement real-time features using SignalR in ASP.NET Web API, while handling scalability, load balancing, and ensuring efficient communication between clients and the server?](https://medium.com/@craftingcode/how-can-i-implement-real-time-features-using-signalr-in-asp-net-1a18551e5afc)
 ### RealTimeDataHub implémentation
 ```csharp
 /*
