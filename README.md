@@ -23,6 +23,10 @@ Ce projet montre comment créer une application Blazor WebAssembly qui affiche d
 SignalR fait partie d'ASP.NET Core. Pour l'utiliser, il suffit de le configurer dans notre fichier Startup.cs ou Program.cs (si l'on utilise des instructions de haut niveau). Les clients SignalR se connectent à des Hubs, qui sont des composants définissant des méthodes pouvant être appelées par les clients pour envoyer des messages ou s'abonner à des messages provenant du serveur.
 
 ``` csharp
+/*
+* BlazorWasmSignalR.SignalRServer
+* Program.cs
+*/
 //Add SignalR services
 builder.Services.AddSignalR();
 
@@ -48,6 +52,10 @@ La méthode OnDisconnectedAsync est appelée lorsqu'un client se déconnecte, re
 
 ### RealTimeDataHub implémentation
 ```csharp
+/*
+* BlazorWasmSignalR.SignalRServer.Hubs
+* RealTimeDataHub
+*/
 using BlazorWasmSignalR.SignalRServer.BackgroundServices;
 using BlazorWasmSignalR.Wasm.Shared;
 using Microsoft.AspNetCore.SignalR;
